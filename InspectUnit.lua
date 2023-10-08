@@ -34,7 +34,7 @@ local slots = {
 local function GetInspectItemListFrame(parent)
     if (not parent.inspectFrame) then
         local itemfont = "ChatFontNormal"
-        local frame = CreateFrame("Frame", nil, parent)
+        local frame = CreateFrame("Frame", nil, parent, "BackdropTemplate")
         frame.backdrop = {
             bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -70,7 +70,7 @@ local function GetInspectItemListFrame(parent)
             insets   = {left = 1, right = 1, top = 1, bottom = 1}
         }
         for i, v in ipairs(slots) do
-            itemframe = CreateFrame("Button", nil, frame)
+            itemframe = CreateFrame("Button", nil, frame, "BackdropTemplate")
             itemframe:SetSize(120, (height-80)/#slots)
             itemframe.index = v.index
             itemframe.backdrop = backdrop
@@ -79,7 +79,7 @@ local function GetInspectItemListFrame(parent)
             else
                 itemframe:SetPoint("TOPLEFT", frame["item"..(i-1)], "BOTTOMLEFT")
             end
-            itemframe.label = CreateFrame("Frame", nil, itemframe)
+            itemframe.label = CreateFrame("Frame", nil, itemframe, "BackdropTemplate")
             itemframe.label:SetSize(38, 16)
             itemframe.label:SetPoint("LEFT")
             itemframe.label:SetBackdrop(backdrop)
@@ -310,7 +310,7 @@ mask:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
 mask:SetPoint("TOPLEFT", PlayerStatsFrame, "TOPLEFT", 3, -2)
 mask:SetPoint("BOTTOMRIGHT", PlayerStatsFrame, "BOTTOMRIGHT", -3, 2)
 mask:SetBlendMode("ADD")
-mask:SetGradientAlpha("VERTICAL", 0.1, 0.2, 0.3, 0.8, 0.1, 0.2, 0.1, 0.8)
+mask:SetGradient("VERTICAL", CreateColor(0.1, 0.2, 0.3, 0.8), CreateColor(0.1, 0.2, 0.1, 0.8))
 
 LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, forceShown)
     if (bool == false) then

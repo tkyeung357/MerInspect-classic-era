@@ -49,7 +49,7 @@
 			</Layer>
 		</Layers>
 	</Frame>
-    <Frame name="ClassicStatsFrameTemplate" hidden="true" virtual="true">
+    <Frame name="ClassicStatsFrameTemplate" hidden="true" virtual="true" inherits="BackdropTemplate">
         <Size x="178" y="200"/>
         <Frames>
             <Frame parentKey="PortraitFrame" inherits="ClassicGarrisonFollowerPortraitTemplate">

@@ -20,7 +20,7 @@ end
 
 --创建单条属性按钮框体
 local function CreateStatFrame(parent, index, key, option)
-    local frame = CreateFrame("Frame", nil, parent, "CharacterStatFrameTemplate")
+    local frame = CreateFrame("Frame", nil, parent, "CharacterStatFrameTemplate,BackdropTemplate")
     frame:EnableMouse(false)
     frame:SetWidth(178)
     frame.key = key
@@ -76,8 +76,6 @@ function ClassicStatsFrameTemplate_Onload(self)
         edgeSize = 16,
         insets   = {left = 4, right = 4, top = 4, bottom = 4}
     }
-    self:SetBackdrop(self.backdrop)
-    self:SetBackdropColor(0, 0, 0, 0.88)
     self.SetStats = SetStats
     local index, keys = 1, ","
     local frame, anchor
@@ -100,6 +98,8 @@ function ClassicStatsFrameTemplate_Onload(self)
     local colors = {{0.9,0.1,0.1},{0,0.9,0.3},{0,0.7,0.7},{1,0.3,0.9},{0.7,0,0.4},{0.9,0.5,0.1}}
     for i, key in ipairs({"ResistanceFire","ResistanceNature","ResistanceFrost","ResistanceArcane","ResistanceShadow","ResistanceHoly"}) do
         frame = CreateStatFrame(self, index, key)
+        frame:SetBackdrop(self.backdrop)
+        frame:SetBackdropColor(0, 0, 0, 0.88)
         frame:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, 0)
         frame.Label:SetTextColor(unpack(colors[i]))
         anchor = frame
