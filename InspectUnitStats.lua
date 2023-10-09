@@ -13,7 +13,7 @@ local GetStatsName = LibItemStats.GetStatsName
 local function ShowSupportedItemStatsFrame(frame, unit)
     if (not frame.statsFrame) then
         if (LibItemStats:IsSupported()) then
-            local statsFrame = CreateFrame("Frame", nil, frame, "ClassicStatsFrameTemplate")
+            local statsFrame = CreateFrame("Frame", nil, frame, "MerClassicEraClassicStatsFrameTemplate")
             frame.statsFrame = statsFrame
             frame:HookScript("OnHide", function(self)
                 self.statsFrame:Hide()
