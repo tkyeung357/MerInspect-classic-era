@@ -304,7 +304,7 @@ end)
 --   Player   --
 ----------------
 
-local PlayerStatsFrame = CreateFrame("Frame", nil, UIParent, "ClassicStatsFrameTemplate")
+local PlayerStatsFrame = CreateFrame("Frame", nil, UIParent, "MerClassicEraClassicStatsFrameTemplate")
 local mask = PlayerStatsFrame:CreateTexture()
 mask:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
 mask:SetPoint("TOPLEFT", PlayerStatsFrame, "TOPLEFT", 3, -2)

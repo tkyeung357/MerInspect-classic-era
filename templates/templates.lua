@@ -20,15 +20,11 @@ end
 
 --创建单条属性按钮框体
 local function CreateStatFrame(parent, index, key, option)
-    local frame = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+    local frame = CreateFrame("Frame", nil, parent, "MerClassicEraClassicCharacterStatFrameTemplate, BackdropTemplate")
     frame:EnableMouse(false)
     frame:SetWidth(178)
     frame.key = key
-    frame.Label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    frame.Label:SetPoint("LEFT", frame, "RIGHT", 4, 0)
-    frame.Value = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    frame.Value:SetPoint("LEFT", frame.Label, "RIGHT", 4, 0)
-    -- frame.Background:SetShown((index%2) ~= 1)
+    frame.Background:SetShown((index%2) ~= 1)
     parent["stat" .. index] = frame
     return frame
 end
@@ -71,7 +67,7 @@ local function HandlePortraitFrame(self)
 end
 
 
-function ClassicStatsFrameTemplate_Onload(self)
+function MerClassicEraClassicStatsFrameTemplate_Onload(self)
     self.backdrop = {
         bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
         edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -123,7 +119,7 @@ function ClassicStatsFrameTemplate_Onload(self)
     end
 end
 
-function ClassicStatsFrameTemplate_OnShow(self)
+function MerClassicEraClassicStatsFrameTemplate_OnShow(self)
     local button
     local height = 66 + 36*3 + 15*self.maxStaticIndex
     HandlePortraitFrame(self)
@@ -176,7 +172,7 @@ function ClassicStatsFrameTemplate_OnShow(self)
     self:SetHeight(height)
 end
 
-function ClassicStatsFrameTemplate_OnHide(self)
+function MerClassicEraClassicStatsFrameTemplate_OnHide(self)
     local index = 1
     while (self["stat"..index]) do
         self["stat"..index].Label:SetText("")
