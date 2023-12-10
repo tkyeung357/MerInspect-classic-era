@@ -246,6 +246,14 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
     if (f == "InspectFrame" or f == "PaperDollFrame") then
         x, y = 33, 14
     end
+
+    -- SOD EngravingFrame (Rune window)
+    if (f == "PaperDollFrame" and EngravingFrame) then
+        if (C_Engraving.IsEngravingEnabled()) then
+            x, y = -180, 14
+        end
+    end
+
     if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
         frame.backdrop.edgeSize = 1
         frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
