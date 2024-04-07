@@ -1,6 +1,6 @@
 ## Interface: 100206
 ## Title: MerInspect for classic era
-## Version: 1.0.7
+## Version: 1.0.8
 ## Notes: Inspect Assist 
 ## Notes-zhCN: 观察助手
 ## Notes-zhTW: 觀察助手
