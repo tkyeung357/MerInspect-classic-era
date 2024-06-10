@@ -35,6 +35,19 @@ local function GetInspectItemListFrame(parent)
     if (not parent.inspectFrame) then
         local itemfont = "ChatFontNormal"
         local frame = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        -- Make the frame movable
+        frame:SetMovable(true)
+        frame:EnableMouse(true)
+        frame:RegisterForDrag("LeftButton")
+        frame:SetScript("OnDragStart", frame.StartMoving)
+        frame:SetScript("OnDragStop", function(self)
+            self:StopMovingOrSizing()
+            -- Save the new position
+            local point, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
+            MerInspectDB.position = {point, relativePoint, xOfs, yOfs}
+            DebugPrintf("Frame position saved")
+        end) 
+
         frame.backdrop = {
             bgFile   = "Interface\\Tooltips\\UI-Tooltip-Background",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -241,37 +254,48 @@ LibEvent:attachTrigger("INSPECT_FRAME_BACKDROP", function(self, frame)
 end)
 
 --設置邊框和位置
-LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
-    local x, y, f = 0, 0, parent:GetName()
-    if (f == "InspectFrame" or f == "PaperDollFrame") then
-        x, y = 33, 14
-    end
-
-    -- SOD EngravingFrame (Rune window)
-    if (f == "PaperDollFrame" and EngravingFrame) then
-        if (C_Engraving.IsEngravingEnabled()) then
-            x, y = -180, 14
-        end
-    end
-
-    if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
-        frame.backdrop.edgeSize = 1
-        frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
-        frame.backdrop.insets.top = 1
-        frame.backdrop.insets.left = 1
-        frame.backdrop.insets.right = 1
-        frame.backdrop.insets.bottom = 1
-        frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 2-x, 0-y)
-    else
-        frame.backdrop.edgeSize = 16
-        frame.backdrop.edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
-        frame.backdrop.insets.top = 4
-        frame.backdrop.insets.left = 4
-        frame.backdrop.insets.right = 4
-        frame.backdrop.insets.bottom = 4
-        frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0-x, 0-y)
-    end
-end)
+-- LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
+--     local x, y, f = 0, 0, parent:GetName()
+--     if (f == "InspectFrame" or f == "PaperDollFrame") then
+--         x, y = 33, 14
+--     end
+-- 
+--     DebugPrintf(f)
+--     DebugPrintf(EngravingFrame)
+-- 
+--     -- SOD EngravingFrame (Rune window)
+--     if (f == "PaperDollFrame" and EngravingFrame) then
+--         if (C_Engraving.IsEngravingEnabled()) then
+--             x, y = -180, 14
+--         end
+--     end
+-- 
+--     if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
+--         frame.backdrop.edgeSize = 1
+--         frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
+--         frame.backdrop.insets.top = 1
+--         frame.backdrop.insets.left = 1
+--         frame.backdrop.insets.right = 1
+--         frame.backdrop.insets.bottom = 1
+--         --frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
+--         --frame:SetPoint("LEFT", CharacterFrame, "RIGHT", 30, 30)
+--         DebugPrintf("show border", x, y)
+--         DebugPrintf(x)
+--         DebugPrintf(y)
+--     else
+--         frame.backdrop.edgeSize = 16
+--         frame.backdrop.edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
+--         frame.backdrop.insets.top = 4
+--         frame.backdrop.insets.left = 4
+--         frame.backdrop.insets.right = 4
+--         frame.backdrop.insets.bottom = 4
+--         frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 0, 0)
+--         frame:SetPoint("LEFT", CharacterFrame, "RIGHT", 30, 30)
+--         DebugPrintf("no border", x, y)
+--         DebugPrintf(x)
+--         DebugPrintf(y)
+--     end
+-- end)
 
 --根據品質設置Label顔色
 LibEvent:attachTrigger("INSPECT_ITEMFRAME_UPDATED", function(self, itemframe)
@@ -328,6 +352,7 @@ LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, for
         if (LibItemStats:IsSupported()) then
             local stats = LibItemStats:GetUnitStats("player")
             stats.ilevel = LibItemInfo:GetUnitItemLevel("player")
+            DebugPrintf(stats)
             PlayerStatsFrame:SetStats(stats):Show()
             if (frame.inspectFrame and frame.inspectFrame:IsShown()) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame.inspectFrame, "TOPRIGHT", 1, 0)
@@ -345,10 +370,12 @@ PaperDollFrame:HookScript("OnShow", function(self)
         local ilevel, _, maxLevel = LibItemInfo:GetUnitItemLevel("player")
         ShowInspectItemListFrame("player", self, ilevel, maxLevel)
     end
+    DebugPrintf("PaperDollFrame:HookScript(OnShow)")
     LibEvent:trigger("TogglePlayerStatsFrame", self, true)
 end)
 
 PaperDollFrame:HookScript("OnHide", function(self)
+    DebugPrintf("PaperDollFrame:HookScript(OnHide)")
     LibEvent:trigger("TogglePlayerStatsFrame", self, false)
 end)
 

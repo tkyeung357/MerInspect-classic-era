@@ -9,6 +9,32 @@ local LibItemInfo = LibStub:GetLibrary("LibItemInfo.1000")
 
 local guids, inspecting = {}, false
 
+-- Restore frame position from saved variables
+function restorePosition(frame)
+    if MerInspectDB and MerInspectDB.position then
+        local point, relativePoint, xOfs, yOfs = unpack(MerInspectDB.position)
+        frame:SetPoint(point, UIParent, relativePoint, xOfs, yOfs)
+        DebugPrintf("restorePosition")
+    else
+        -- Default position
+        myFrame:SetPoint("LEFT", CharacterFrame, "RIGHT", 10, 0)
+    end
+end
+
+function DebugPrintf(...)
+    if (MerInspectDB and MerInspectDB.Debug) then
+        local status, res = pcall(format, ...)
+        if status then
+            if DLAPI then 
+                DLAPI.DebugLog("MerInspect", res) 
+            else 
+                local msg = table.concat({...}, " ")
+                DEFAULT_CHAT_FRAME:AddMessage(msg)
+            end
+        end
+    end
+end
+
 -- Global API
 function GetInspectInfo(unit, timelimit, checkhp)
     local guid = UnitGUID(unit)
