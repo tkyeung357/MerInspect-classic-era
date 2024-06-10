@@ -120,6 +120,17 @@ function MerClassicEraClassicStatsFrameTemplate_Onload(self)
 end
 
 function MerClassicEraClassicStatsFrameTemplate_OnShow(self)
+        -- Check if self is nil
+    if not self then
+        DebugPrintf("Error: self is nil in MerClassicEraClassicStatsFrameTemplate_OnShow")
+        return
+    end
+
+    -- Ensure maxStaticIndex is initialized
+    if not self.maxStaticIndex then
+        self.maxStaticIndex = 0
+    end
+
     local button
     local height = 66 + 36*3 + 15*self.maxStaticIndex
     HandlePortraitFrame(self)

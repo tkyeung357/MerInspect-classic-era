@@ -92,9 +92,6 @@ end
 
 --装备属性: 逐条根据文字解析
 local function GetStats(text, r, g, b, stats, link)
-    DebugPrintf("GetStats")
-    DebugPrintf(stats)
-    DebugPrintf(link)
     local v, v1, v2, txt, txt1, txt2
     --套装
     if strfind(text, "%(%d/%d%)") or strfind(text, "（%d/%d）") then
