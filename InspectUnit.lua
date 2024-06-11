@@ -42,10 +42,17 @@ local function GetInspectItemListFrame(parent)
         frame:SetScript("OnDragStart", frame.StartMoving)
         frame:SetScript("OnDragStop", function(self)
             self:StopMovingOrSizing()
+            DebugPrintf("start Frame position")
             -- Save the new position
             local point, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
-            MerInspectDB.position = {point, relativePoint, xOfs, yOfs}
+            local relativeToName = relativeTo and relativeTo:GetName() or "UIParent"
+            MerInspectDB.position = {point, relativeToName, relativePoint, xOfs, yOfs, 1}
             DebugPrintf("Frame position saved")
+            DebugPrintf(point)
+            DebugPrintf(relativeToName)
+            DebugPrintf(relativePoint)
+            DebugPrintf(xOfs)
+            DebugPrintf(yOfs)
         end) 
 
         frame.backdrop = {
@@ -218,6 +225,19 @@ function ShowInspectItemListFrame(unit, parent, ilevel, maxLevel)
     return frame
 end
 
+-- SOD rune frame
+local function CheckEngravingFrame()
+    local isEnabled = false
+    local frame = _G["EngravingFrame"]
+    if frame then
+        DebugPrintf("EngravingFrame exists.")
+        isEnabled = frame:IsShown()
+    else
+        DebugPrintf("EngravingFrame does not exist.")
+    end
+    return isEnabled
+end
+
 --裝備變更時
 LibEvent:attachEvent("UNIT_INVENTORY_CHANGED", function(self, unit)
     if (InspectFrame and InspectFrame.unit and InspectFrame.unit == unit) then
@@ -257,36 +277,50 @@ end)
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
     DebugPrintf("INSPECT_FRAME_SHOWN")
     local x, y, f = 0, 0, parent:GetName()
-    --if (f == "InspectFrame" or f == "PaperDollFrame") then
-    --    x, y = 33, 14
-    --end
+    local isPositioned = false
+    local point = "TOPLEFT"
+    local relativePoint = "TOPRIGHT"
+    local relativeTo = parent
 
-    -- SOD EngravingFrame (Rune window)
-    -- if (f == "PaperDollFrame" and EngravingFrame) then
-    --     if (C_Engraving.IsEngravingEnabled()) then
-    --         x, y = -180, 14
-    --     end
-    -- end
 
-    if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
-        frame.backdrop.edgeSize = 1
-        frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
-        frame.backdrop.insets.top = 1
-        frame.backdrop.insets.left = 1
-        frame.backdrop.insets.right = 1
-        frame.backdrop.insets.bottom = 1
-        --frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
-        --frame:SetPoint("LEFT", CharacterFrame, "RIGHT", 30, 30)
-    else
-        frame.backdrop.edgeSize = 16
-        frame.backdrop.edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
-        frame.backdrop.insets.top = 4
-        frame.backdrop.insets.left = 4
-        frame.backdrop.insets.right = 4
-        frame.backdrop.insets.bottom = 4
-        -- frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 0, 0)
-        -- frame:SetPoint("LEFT", CharacterFrame, "RIGHT", 30, 30)
+    if MerInspectDB and MerInspectDB.position then
+        local _point, _relativeToName, _relativePoint, xOfs, yOfs, _isPositioned = unpack(MerInspectDB.position)
+        if _isPositioned == 1 then
+            isPositioned = true
+        end
     end
+
+    if isPositioned then
+        restorePosition(frame)
+    else
+        if (f == "InspectFrame" or f == "PaperDollFrame") then
+            x, y = 33, 14
+        end
+
+        if CheckEngravingFrame() then
+            x, y = 180, -13 
+        end
+        if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
+            frame.backdrop.edgeSize = 1
+            frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
+            frame.backdrop.insets.top = 1
+            frame.backdrop.insets.left = 1
+            frame.backdrop.insets.right = 1
+            frame.backdrop.insets.bottom = 1
+            --frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
+        else
+            frame.backdrop.edgeSize = 16
+            frame.backdrop.edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
+            frame.backdrop.insets.top = 4
+            frame.backdrop.insets.left = 4
+            frame.backdrop.insets.right = 4
+            frame.backdrop.insets.bottom = 4
+            -- frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 0, 0)
+        end
+        DebugPrintf("update frame point")
+        frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", x, y)
+    end
+
 end)
 
 --根據品質設置Label顔色

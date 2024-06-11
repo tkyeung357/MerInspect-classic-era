@@ -12,12 +12,24 @@ local guids, inspecting = {}, false
 -- Restore frame position from saved variables
 function restorePosition(frame)
     if MerInspectDB and MerInspectDB.position then
-        local point, relativePoint, xOfs, yOfs = unpack(MerInspectDB.position)
-        frame:SetPoint(point, UIParent, relativePoint, xOfs, yOfs)
-        DebugPrintf("restorePosition")
+        local point, relativeToName, relativePoint, xOfs, yOfs, isPositioned = unpack(MerInspectDB.position)
+        if isPositioned == 1 then
+            frame:ClearAllPoints()
+            frame:SetPoint(point, _G[relativeToName], relativePoint, xOfs, yOfs)
+            DebugPrintf("restorePosition")
+            DebugPrintf(point)
+            DebugPrintf(relativeToName)
+            DebugPrintf(relativePoint)
+            DebugPrintf(xOfs)
+            DebugPrintf(yOfs)
+        else 
+
+            -- Default position
+            frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 10, 0)
+        end
     else
         -- Default position
-        myFrame:SetPoint("LEFT", CharacterFrame, "RIGHT", 10, 0)
+        frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 10, 0)
     end
 end
 
