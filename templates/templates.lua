@@ -44,6 +44,8 @@ end
 --头像框架(装等框架/边框颜色等) @trigger: INSPECT_FRAME_BACKDROP
 local ItemLevelPattern = (ITEM_LEVEL_ABBR or "ilvl") .. " %.1f"
 local function HandlePortraitFrame(self)
+    DebugPrintf(self)
+    DebugPrintf(self.AttributesCategory)
     local ilevel = self.data.ilevel or 0
     local unit = self.data.unit or "player"
     local class = select(2, UnitClass(unit))
@@ -121,15 +123,15 @@ end
 
 function MerClassicEraClassicStatsFrameTemplate_OnShow(self)
         -- Check if self is nil
-    if not self then
-        DebugPrintf("Error: self is nil in MerClassicEraClassicStatsFrameTemplate_OnShow")
-        return
-    end
+    -- if not self then
+    --     DebugPrintf("Error: self is nil in MerClassicEraClassicStatsFrameTemplate_OnShow")
+    --     return
+    -- end
 
     -- Ensure maxStaticIndex is initialized
-    if not self.maxStaticIndex then
-        self.maxStaticIndex = 0
-    end
+    -- if not self.maxStaticIndex then
+    --     self.maxStaticIndex = 0
+    -- end
 
     local button
     local height = 66 + 36*3 + 15*self.maxStaticIndex
