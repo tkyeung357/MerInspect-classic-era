@@ -320,9 +320,18 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
             frame.backdrop.insets.bottom = 4
         end
         Core.DebugPrintf("update frame point")
-        Core.DebugPrintf("frame:" .. f)
-        Core.DebugPrintf("x,y" .. x .. y)
-        frame:SetPoint("TOPLEFT", relativeTo, "TOPRIGHT", x, y)
+        Core.DebugPrintf("relative frame:" .. relativeTo:GetName())
+        Core.DebugPrintf("x,y:" .. x .. " , ".. y)
+
+        -- Clear all previous points to avoid conflicts
+        frame:ClearAllPoints()
+
+        -- Set the point relative to the parent frame, avoiding circular references
+        if relativeTo and relativeTo ~= frame then
+            frame:SetPoint("TOPLEFT", relativeTo, "TOPRIGHT", x, y)
+        else
+            Core.DebugPrintf("Cannot set anchor: relativeTo is invalid or creates a circular reference.")
+        end
     end
 
 end)

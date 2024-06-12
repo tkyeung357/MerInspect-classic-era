@@ -25,10 +25,11 @@ end
 
 -- Restore frame position from saved variables
 function MerInsClaEra.Core.RestorePosition(frame)
+    -- Clear all previous points to avoid conflicts
+    frame:ClearAllPoints()
     if MerInspectDB and MerInspectDB.position then
         local point, relativeToName, relativePoint, xOfs, yOfs, isPositioned = unpack(MerInspectDB.position)
         if isPositioned == 1 then
-            frame:ClearAllPoints()
             frame:SetPoint(point, _G[relativeToName], relativePoint, xOfs, yOfs)
             MerInsClaEra.Core.DebugPrintf("restorePosition")
             MerInsClaEra.Core.DebugPrintf(point)
