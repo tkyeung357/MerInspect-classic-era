@@ -279,14 +279,29 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
     MerInsClaEra.Core.DebugPrintf("INSPECT_FRAME_SHOWN")
     local x, y, f = 0, 0, parent:GetName()
     local Core = MerInsClaEra.Core
+    -- Get the anchor position of the CharacterFrameCloseButton
+    -- use the Close bottom position to calculate the correct anchor point of the character frame
+    local point, relativeTo, relativePoint, offsetX, offsetY = CharacterFrameCloseButton:GetPoint()
+        
+    Core.DebugPrintf("CharacterFrameCloseButton:GetPoint(): x,y" .. offsetX .. offsetY)
 
     if Core.IsPositioned() then
         Core.RestorePosition(frame)
     else
+        if (f == "InspectFrame" or f == "PaperDollFrame") then
+            -- dealing with inconsist CharacterFrame anchor position between Era and Cata
+            if offsetX < 0 then
+                -- Use cases: CharacterFrame seems scaled down in Era
+                x, y = offsetX + 15, offsetY + 10
+            else 
+                x, y = offsetX, offsetY - 5
+            end
+        end
+
+        -- SOD rune frame
         if CheckEngravingFrame() then
-            x, y = 180, -14 
-        elseif (f == "InspectFrame" or f == "PaperDollFrame") then
-            x, y = -33, -14
+            relativeTo = parent
+            x = x + 210
         end
         
         if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
@@ -305,9 +320,9 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
             frame.backdrop.insets.bottom = 4
         end
         Core.DebugPrintf("update frame point")
-        Core.DebugPrintf(x)
-        Core.DebugPrintf(y)
-        frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", x, y)
+        Core.DebugPrintf("frame:" .. f)
+        Core.DebugPrintf("x,y" .. x .. y)
+        frame:SetPoint("TOPLEFT", relativeTo, "TOPRIGHT", x, y)
     end
 
 end)

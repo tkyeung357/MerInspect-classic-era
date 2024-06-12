@@ -16,9 +16,6 @@ local function ShowSupportedItemStatsFrame(frame, unit)
     if (not frame.statsFrame) then
         if (LibItemStats:IsSupported()) then
             local statsFrame = CreateFrame("Frame", nil, frame, "MerClassicEraClassicStatsFrameTemplate")
-            MerInsClaEra.Core.DebugPrintf("LibItemStats:IsSupported()")
-            MerInsClaEra.Core.DebugPrintf("statsFrame = CreateFrame(Frame)")
-            MerInsClaEra.Core.DebugPrintf(frame)
             frame.statsFrame = statsFrame
             frame:HookScript("OnHide", function(self)
                 self.statsFrame:Hide()

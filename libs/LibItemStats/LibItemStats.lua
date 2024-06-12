@@ -270,7 +270,6 @@ function lib:GetUnitStats(unit, stats)
     local _, race = UnitRace(unit)
     local _, class = UnitClass(unit) 
     stats.unit = unit
-    MerInsClaEra.Core.DebugPrintf(stats.unit)
     self:GetUnitItemStats(unit, stats)
     self:GetUnitBuffStats(unit, stats)
     self:GetUnitTalentStats(unit, stats, class, race, level)
