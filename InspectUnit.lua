@@ -1,4 +1,5 @@
-
+-- namespace and alias
+MerInsClaEra = MerInsClaEra or {}
 -------------------------------------
 -- 查看装备等级 Author: M
 -------------------------------------
@@ -42,17 +43,17 @@ local function GetInspectItemListFrame(parent)
         frame:SetScript("OnDragStart", frame.StartMoving)
         frame:SetScript("OnDragStop", function(self)
             self:StopMovingOrSizing()
-            DebugPrintf("start Frame position")
+            MerInsClaEra.Core.DebugPrintf("start Frame position")
             -- Save the new position
             local point, relativeTo, relativePoint, xOfs, yOfs = self:GetPoint()
             local relativeToName = relativeTo and relativeTo:GetName() or "UIParent"
             MerInspectDB.position = {point, relativeToName, relativePoint, xOfs, yOfs, 1}
-            DebugPrintf("Frame position saved")
-            DebugPrintf(point)
-            DebugPrintf(relativeToName)
-            DebugPrintf(relativePoint)
-            DebugPrintf(xOfs)
-            DebugPrintf(yOfs)
+            MerInsClaEra.Core.DebugPrintf("Frame position saved")
+            MerInsClaEra.Core.DebugPrintf(point)
+            MerInsClaEra.Core.DebugPrintf(relativeToName)
+            MerInsClaEra.Core.DebugPrintf(relativePoint)
+            MerInsClaEra.Core.DebugPrintf(xOfs)
+            MerInsClaEra.Core.DebugPrintf(yOfs)
         end) 
 
         frame.backdrop = {
@@ -230,10 +231,10 @@ local function CheckEngravingFrame()
     local isEnabled = false
     local frame = _G["EngravingFrame"]
     if frame then
-        DebugPrintf("EngravingFrame exists.")
+        MerInsClaEra.Core.DebugPrintf("EngravingFrame exists.")
         isEnabled = frame:IsShown()
     else
-        DebugPrintf("EngravingFrame does not exist.")
+        MerInsClaEra.Core.DebugPrintf("EngravingFrame does not exist.")
     end
     return isEnabled
 end
@@ -275,31 +276,19 @@ end)
 
 --設置邊框和位置
 LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilevel)
-    DebugPrintf("INSPECT_FRAME_SHOWN")
+    MerInsClaEra.Core.DebugPrintf("INSPECT_FRAME_SHOWN")
     local x, y, f = 0, 0, parent:GetName()
-    local isPositioned = false
-    local point = "TOPLEFT"
-    local relativePoint = "TOPRIGHT"
-    local relativeTo = parent
+    local Core = MerInsClaEra.Core
 
-
-    if MerInspectDB and MerInspectDB.position then
-        local _point, _relativeToName, _relativePoint, xOfs, yOfs, _isPositioned = unpack(MerInspectDB.position)
-        if _isPositioned == 1 then
-            isPositioned = true
-        end
-    end
-
-    if isPositioned then
-        restorePosition(frame)
+    if Core.IsPositioned() then
+        Core.RestorePosition(frame)
     else
-        if (f == "InspectFrame" or f == "PaperDollFrame") then
-            x, y = 33, 14
-        end
-
         if CheckEngravingFrame() then
-            x, y = 180, -13 
+            x, y = 180, -14 
+        elseif (f == "InspectFrame" or f == "PaperDollFrame") then
+            x, y = -33, -14
         end
+        
         if (MerInspectDB and MerInspectDB.ShowInspectAngularBorder) then
             frame.backdrop.edgeSize = 1
             frame.backdrop.edgeFile = "Interface\\Buttons\\WHITE8X8"
@@ -307,7 +296,6 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
             frame.backdrop.insets.left = 1
             frame.backdrop.insets.right = 1
             frame.backdrop.insets.bottom = 1
-            --frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", 0, 0)
         else
             frame.backdrop.edgeSize = 16
             frame.backdrop.edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
@@ -315,9 +303,10 @@ LibEvent:attachTrigger("INSPECT_FRAME_SHOWN", function(self, frame, parent, ilev
             frame.backdrop.insets.left = 4
             frame.backdrop.insets.right = 4
             frame.backdrop.insets.bottom = 4
-            -- frame:SetPoint("TOPLEFT", CharacterFrame, "TOPRIGHT", 0, 0)
         end
-        DebugPrintf("update frame point")
+        Core.DebugPrintf("update frame point")
+        Core.DebugPrintf(x)
+        Core.DebugPrintf(y)
         frame:SetPoint("TOPLEFT", parent, "TOPRIGHT", x, y)
     end
 
@@ -378,7 +367,7 @@ LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, for
         if (LibItemStats:IsSupported()) then
             local stats = LibItemStats:GetUnitStats("player")
             stats.ilevel = LibItemInfo:GetUnitItemLevel("player")
-            DebugPrintf(stats)
+            MerInsClaEra.Core.DebugPrintf(stats)
             PlayerStatsFrame:SetStats(stats):Show()
             if (frame.inspectFrame and frame.inspectFrame:IsShown()) then
                 PlayerStatsFrame:SetPoint("TOPLEFT", frame.inspectFrame, "TOPRIGHT", 1, 0)
@@ -392,10 +381,10 @@ LibEvent:attachTrigger("TogglePlayerStatsFrame", function(self, frame, bool, for
 end)
 
 PaperDollFrame:HookScript("OnShow", function(self)
-    DebugPrintf("PaperDollFrame:HookScript(OnShow)")
+    MerInsClaEra.Core.DebugPrintf("PaperDollFrame:HookScript(OnShow)")
     if (MerInspectDB and MerInspectDB.ShowCharacterItemSheet) then
-        DebugPrintf("ShowCharacterItemSheet")
-        DebugPrintf(MerInspectDB.ShowCharacterItemSheet)
+        MerInsClaEra.Core.DebugPrintf("ShowCharacterItemSheet")
+        MerInsClaEra.Core.DebugPrintf(MerInspectDB.ShowCharacterItemSheet)
         local ilevel, _, maxLevel = LibItemInfo:GetUnitItemLevel("player")
         ShowInspectItemListFrame("player", self, ilevel, maxLevel)
     end
@@ -403,7 +392,7 @@ PaperDollFrame:HookScript("OnShow", function(self)
 end)
 
 PaperDollFrame:HookScript("OnHide", function(self)
-    DebugPrintf("PaperDollFrame:HookScript(OnHide)")
+    MerInsClaEra.Core.DebugPrintf("PaperDollFrame:HookScript(OnHide)")
     LibEvent:trigger("TogglePlayerStatsFrame", self, false)
 end)
 

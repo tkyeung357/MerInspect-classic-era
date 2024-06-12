@@ -1,3 +1,5 @@
+-- namespace and alias
+MerInsClaEra = MerInsClaEra or {}
 
 -------------------------------------
 -- InspectCore Author: M
@@ -9,19 +11,31 @@ local LibItemInfo = LibStub:GetLibrary("LibItemInfo.1000")
 
 local guids, inspecting = {}, false
 
+-- check if the frame was moved
+function MerInsClaEra.Core.IsPositioned()
+    local isPositioned = false
+    if MerInspectDB and MerInspectDB.position then
+        local _point, _relativeToName, _relativePoint, xOfs, yOfs, _isPositioned = unpack(MerInspectDB.position)
+        if _isPositioned == 1 then
+            isPositioned = true
+        end
+    end
+    return isPositioned
+end
+
 -- Restore frame position from saved variables
-function restorePosition(frame)
+function MerInsClaEra.Core.RestorePosition(frame)
     if MerInspectDB and MerInspectDB.position then
         local point, relativeToName, relativePoint, xOfs, yOfs, isPositioned = unpack(MerInspectDB.position)
         if isPositioned == 1 then
             frame:ClearAllPoints()
             frame:SetPoint(point, _G[relativeToName], relativePoint, xOfs, yOfs)
-            DebugPrintf("restorePosition")
-            DebugPrintf(point)
-            DebugPrintf(relativeToName)
-            DebugPrintf(relativePoint)
-            DebugPrintf(xOfs)
-            DebugPrintf(yOfs)
+            MerInsClaEra.Core.DebugPrintf("restorePosition")
+            MerInsClaEra.Core.DebugPrintf(point)
+            MerInsClaEra.Core.DebugPrintf(relativeToName)
+            MerInsClaEra.Core.DebugPrintf(relativePoint)
+            MerInsClaEra.Core.DebugPrintf(xOfs)
+            MerInsClaEra.Core.DebugPrintf(yOfs)
         else 
 
             -- Default position
@@ -33,7 +47,7 @@ function restorePosition(frame)
     end
 end
 
-function DebugPrintf(...)
+function MerInsClaEra.Core.DebugPrintf(...)
     if (MerInspectDB and MerInspectDB.Debug) then
         local status, res = pcall(format, ...)
         if status then

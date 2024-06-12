@@ -1,3 +1,5 @@
+-- namespace and alias
+MerInsClaEra = MerInsClaEra or {}
 
 -------------------------------------
 -- 裝備屬性統計
@@ -14,9 +16,9 @@ local function ShowSupportedItemStatsFrame(frame, unit)
     if (not frame.statsFrame) then
         if (LibItemStats:IsSupported()) then
             local statsFrame = CreateFrame("Frame", nil, frame, "MerClassicEraClassicStatsFrameTemplate")
-            DebugPrintf("LibItemStats:IsSupported()")
-            DebugPrintf("statsFrame = CreateFrame(Frame)")
-            DebugPrintf(frame)
+            MerInsClaEra.Core.DebugPrintf("LibItemStats:IsSupported()")
+            MerInsClaEra.Core.DebugPrintf("statsFrame = CreateFrame(Frame)")
+            MerInsClaEra.Core.DebugPrintf(frame)
             frame.statsFrame = statsFrame
             frame:HookScript("OnHide", function(self)
                 self.statsFrame:Hide()

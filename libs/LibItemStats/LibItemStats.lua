@@ -1,3 +1,5 @@
+-- namespace and alias
+MerInsClaEra = MerInsClaEra or {}
 
 ---------------------------------
 -- 經典版物品屬性统计 Author: M
@@ -268,7 +270,7 @@ function lib:GetUnitStats(unit, stats)
     local _, race = UnitRace(unit)
     local _, class = UnitClass(unit) 
     stats.unit = unit
-    DebugPrintf(stats.unit)
+    MerInsClaEra.Core.DebugPrintf(stats.unit)
     self:GetUnitItemStats(unit, stats)
     self:GetUnitBuffStats(unit, stats)
     self:GetUnitTalentStats(unit, stats, class, race, level)
