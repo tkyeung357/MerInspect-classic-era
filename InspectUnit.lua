@@ -37,8 +37,8 @@ local function GetInspectItemListFrame(parent)
         local itemfont = "ChatFontNormal"
         local frame = CreateFrame("Frame", nil, parent, "BackdropTemplate")
         -- Make the frame movable
-        frame:SetMovable(true)
-        frame:EnableMouse(true)
+        frame:SetMovable(MerInsClaEra.Core.MoveFrame())
+        frame:EnableMouse(MerInsClaEra.Core.MoveFrame())
         frame:RegisterForDrag("LeftButton")
         frame:SetScript("OnDragStart", frame.StartMoving)
         frame:SetScript("OnDragStop", function(self)
