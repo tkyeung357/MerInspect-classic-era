@@ -26,12 +26,12 @@ local DefaultDB = {
     ShowInspectAngularBorder = false,       --觀察面板直角邊框
     ShowInspectColoredLabel = true,         --觀察面板顔色隨物品品質
     ShowInspectItemSheet = true,            --顯示观察对象装备列表
-        ShowOwnFrameWhenInspecting = false,  --觀察同時顯示自己裝備列表
-        ShowItemStats = true,                --顯示裝備屬性統計
-        Debug = false,
-        DefaultPosition = false,
-        position = {"TOPLEFT", "CharacterFrame", "TOPRIGHT", 0, 0, 0} -- point, relativeTo, relativePoint, xOfs, yOfs, isPositioned (0/1)
-
+    ShowOwnFrameWhenInspecting = false,  --觀察同時顯示自己裝備列表
+    ShowItemStats = true,                --顯示裝備屬性統計
+    Debug = false,
+    DefaultPosition = false,
+    position = {"TOPLEFT", "CharacterFrame", "TOPRIGHT", 0, 0, 0}, -- point, relativeTo, relativePoint, xOfs, yOfs, isPositioned (0/1)
+    MoveFrame = false -- option to unlock the frame (panel)
 }
 
 local options = {
@@ -47,6 +47,7 @@ local options = {
             { key = "ShowItemStats" },
         }
     },
+    { key = "MoveFrame" },
     { key = "Debug" },
 }
 

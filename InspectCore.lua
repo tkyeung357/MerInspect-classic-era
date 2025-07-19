@@ -12,9 +12,17 @@ local LibItemInfo = LibStub:GetLibrary("LibItemInfo.1000")
 local guids, inspecting = {}, false
 
 -- check if the frame was moved
+function MerInsClaEra.Core.MoveFrame()
+    local enabled = false
+    if MerInspectDB and MerInspectDB.MoveFrame then
+        enabled = true
+    end
+    return enabled
+end
+-- check if the frame was moved
 function MerInsClaEra.Core.IsPositioned()
     local isPositioned = false
-    if MerInspectDB and MerInspectDB.position then
+    if MerInspectDB and MerInspectDB.position and MerInspectDB.MoveFrame then
         local _point, _relativeToName, _relativePoint, xOfs, yOfs, _isPositioned = unpack(MerInspectDB.position)
         if _isPositioned == 1 then
             isPositioned = true
@@ -27,7 +35,7 @@ end
 function MerInsClaEra.Core.RestorePosition(frame)
     -- Clear all previous points to avoid conflicts
     frame:ClearAllPoints()
-    if MerInspectDB and MerInspectDB.position then
+    if MerInspectDB and MerInspectDB.position and MerInspectDB.MoveFrame then
         local point, relativeToName, relativePoint, xOfs, yOfs, isPositioned = unpack(MerInspectDB.position)
         if isPositioned == 1 then
             frame:SetPoint(point, _G[relativeToName], relativePoint, xOfs, yOfs)
